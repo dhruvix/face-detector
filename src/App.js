@@ -29,11 +29,12 @@ class App extends Component {
 
   calculateFaceLocation = (data) =>{
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
-    //console.log(clarifaiFace);
+    console.log("data from API: ",clarifaiFace);
     const image = document.getElementById('inputimage');
+    console.log(image);
     const width = Number(image.width);
     const height = Number(image.height);
-    //console.log(width,height);
+    console.log("width,height: ",width,height);
     return {
       leftCol: clarifaiFace.left_col * width,
       topRow: clarifaiFace.top_row * height,
@@ -49,13 +50,15 @@ class App extends Component {
 
   onInputChange = (event) => {
     this.setState({input: event.target.value});
+    console.log(this.state.input);
   }
 
   onSubmit = () => {
     this.setState({imageurl:this.state.input})
     app.models
       .predict(Clarifai.FACE_DETECT_MODEL,this.state.input)
-      .then((response)=> {this.displayBox(this.calculateFaceLocation(response));})
+      .then((response)=> {console.log("submitted");
+        this.displayBox(this.calculateFaceLocation(response));})
       .catch(err => console.log(err));
   }
 
@@ -69,7 +72,7 @@ class App extends Component {
   }
 
   render(){
-    const { isSignedIn, imageUrl, route, box } = this.state;
+    const { isSignedIn, imageurl, route, box } = this.state;
     return (
       <div className="App">
          <Particles />
@@ -78,13 +81,13 @@ class App extends Component {
           ? <div>
               <Logo />
               <Rank />
-              <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />
-              <FaceRecognition box={box} imageUrl={imageUrl} />
+              <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit} />
+              <FaceRecognition box={box} imageurl={imageurl} />
             </div>
           : (
              route === 'signin'
-             ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
-             : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+             ? <Signin onRouteChange={this.onRouteChange}/>
+             : <Register onRouteChange={this.onRouteChange}/>
             )
         }
       </div>
@@ -94,7 +97,3 @@ class App extends Component {
 
 export default App;
 
-// af6f1b614c5b4fc08c41f4591b0bf509
-
-//https://cdn.britannica.com/18/136518-050-CD0E49C6/The-Beatles-Ringo-Starr-Paul-McCartney-George.jpg
-//https://pbs.twimg.com/profile_images/1134082549041393672/QbihPzrL_400x400.png
