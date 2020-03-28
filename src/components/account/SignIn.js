@@ -1,9 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-function Signin({onRouteChange}) {
-  
-  function onSubmitSignIn() {
-          onRouteChange('home');
+function Signin({onRouteChange,loadUser}) {
+
+  const [signInPassword, setPassword] = useState('');
+  const [signInEmail, setEmail] = useState('');
+
+  function onEmailChange(event){
+    setEmail(event.target.value);
+  }
+
+  function onPasswordChange(event){
+    setPassword(event.target.value);
+  }
+
+  function onSubmitSignIn(){
+    console.log(signInEmail,signInPassword);
+    fetch('http://localhost:3001/signin', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        email: signInEmail,
+        password: signInPassword
+      })
+    })
+    .then(response => response.json())
+    .then(user => {
+      if(user.id){
+        loadUser(user);
+        onRouteChange('home');
+      }
+    })
   }
 
     return (
@@ -19,6 +45,7 @@ function Signin({onRouteChange}) {
                   type="email"
                   name="email-address"
                   id="email-address"
+                  onChange={onEmailChange}
                 />
               </div>
               <div className="mv3">
@@ -28,6 +55,7 @@ function Signin({onRouteChange}) {
                   type="password"
                   name="password"
                   id="password"
+                  onChange={onPasswordChange}
                 />
               </div>
             </fieldset>

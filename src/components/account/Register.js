@@ -1,9 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-function Register({onRouteChange}) {
+function Register({onRouteChange,loadUser}) {
   
-  function onSubmitSignIn() {
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+
+  function onEmailChange(event){
+    setEmail(event.target.value);
+  }
+
+  function onPasswordChange(event){
+    setPassword(event.target.value);
+  }
+
+  function onNameChange(event){
+    setName(event.target.value);
+  }
+
+  function onSubmitSignIn(){
+    console.log(email,password,name);
+    fetch('http://localhost:3001/register', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        name: name
+      })
+    })
+    .then(response => response.json())
+      .then(user => {
+        if (user) {
+          loadUser(user);
           onRouteChange('home');
+        }
+      })
   }
 
     return (
@@ -19,6 +51,7 @@ function Register({onRouteChange}) {
                   type="text"
                   name="name"
                   id="name"
+                  onChange={onNameChange}
                 />
               </div>
               <div className="mt3">
@@ -28,6 +61,7 @@ function Register({onRouteChange}) {
                   type="email"
                   name="email-address"
                   id="email-address"
+                  onChange={onEmailChange}
                 />
               </div>
               <div className="mv3">
@@ -37,6 +71,7 @@ function Register({onRouteChange}) {
                   type="password"
                   name="password"
                   id="password"
+                  onChange={onPasswordChange}
                 />
               </div>
             </fieldset>
