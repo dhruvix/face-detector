@@ -7,31 +7,29 @@ import FaceRecognition from './components/facerecognition/FaceRecognition';
 import Signin from './components/account/SignIn';
 import Register from './components/account/Register';
 import './App.css';
-import Clarifai from 'clarifai';
+// import Clarifai from 'clarifai';
 import Particles from './Particlejs';
 
-const app = new Clarifai.App({
-  apiKey: 'af6f1b614c5b4fc08c41f4591b0bf509'
- });
+const initialstate ={
+  input:'',
+  imageurl:'',
+  box:{},
+  route: 'signin',
+  isSignedIn: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+  }
+};
 
 class App extends Component {
 
   constructor() {
     super();
-    this.state = {
-      input:'',
-      imageurl:'',
-      box:{},
-      route: 'signin',
-      isSignedIn: false,
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: ''
-      }
-    }
+    this.state = initialstate;
   }
 
   loadUser = (data) =>{
@@ -72,8 +70,13 @@ class App extends Component {
 
   onSubmit = () => {
     this.setState({imageurl:this.state.input})
-    app.models
-      .predict(Clarifai.FACE_DETECT_MODEL,this.state.input)
+    fetch('http://localhost:3001/imageurl', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input: this.state.input
+      })
+    }).then(response => response.json())
       .then((response)=> {console.log("submitted");
         if(response){
           fetch('http://localhost:3001/image', {
@@ -93,7 +96,7 @@ class App extends Component {
 
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState({isSignedIn: false})
+      this.setState(initialstate)
     } else if (route === 'home') {
       this.setState({isSignedIn: true})
     }

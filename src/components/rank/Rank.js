@@ -4,9 +4,9 @@ function Rank({name, entries}) {
     return (
         <div>
             <div className='yellow f3'>
-                {`${name} , your current rank is...`}
+                {`${name} , your entry count is...`}
                 <div className='gold f1 '>
-                    {`#${entries}`}
+                    {entries}
                 </div>
             </div>
         </div>
