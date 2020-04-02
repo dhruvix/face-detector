@@ -20,7 +20,7 @@ function Register({onRouteChange,loadUser}) {
 
   function onSubmitSignIn(){
     console.log(email,password,name);
-    fetch('https://evening-anchorage-72666.herokuapp.com//register', {
+    fetch('https://evening-anchorage-72666.herokuapp.com/register', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
