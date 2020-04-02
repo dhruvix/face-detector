@@ -7,7 +7,6 @@ import FaceRecognition from './components/facerecognition/FaceRecognition';
 import Signin from './components/account/SignIn';
 import Register from './components/account/Register';
 import './App.css';
-// import Clarifai from 'clarifai';
 import Particles from './Particlejs';
 
 const initialstate ={
