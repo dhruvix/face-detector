@@ -9,7 +9,6 @@ function Logo() {
             <Tilt className="Tilt br2 shadow-2" options={{ max: 55}} style={{ height: 100, width: 100 }} >
                 <div className="Tilt-inner pa3">
                     <img style={{ paddingTop: '3px'}} alt='logo' src={logoface} />
-                    <p className='gold'>2e</p>
                 </div>
             </Tilt>
         </div>

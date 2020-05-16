@@ -19,7 +19,6 @@ function Register({onRouteChange,loadUser}) {
   }
 
   function onSubmitSignIn(){
-    console.log(email,password,name);
     fetch('https://evening-anchorage-72666.herokuapp.com/register', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
@@ -34,6 +33,9 @@ function Register({onRouteChange,loadUser}) {
         if (user.id) {
           loadUser(user);
           onRouteChange('home');
+        }
+        else{
+          alert("couldn't register");
         }
       })
   }

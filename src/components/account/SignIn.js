@@ -14,7 +14,6 @@ function Signin({onRouteChange,loadUser}) {
   }
 
   function onSubmitSignIn(){
-    console.log(signInEmail,signInPassword);
     fetch('https://evening-anchorage-72666.herokuapp.com/signin', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
@@ -28,6 +27,9 @@ function Signin({onRouteChange,loadUser}) {
       if(user.id){
         loadUser(user);
         onRouteChange('home');
+      }
+      else{
+        alert("couldn't sign in");
       }
     })
   }

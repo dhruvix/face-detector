@@ -7,7 +7,17 @@ function FaceRecognition({imageurl,box}) {
         <div className='centre ma'>
       <div className='absolute mt2'>
         <img id='inputimage' alt='' src={imageurl} width='500px' heigh='auto'/>
-        <div className='bounding-box' style={{top: box.topRow, right: box.rightCol, bottom: box.bottomRow, left: box.leftCol}}></div>
+        {
+          (box.length !== 0)?
+            (box.map((a,i)=>{
+              console.log("face",i,"recieved");
+              return(
+              <div className='bounding-box' style={{top: a.topRow, right: a.rightCol, bottom: a.bottomRow, left: a.leftCol}}></div>
+            )
+            }))
+            :
+            (console.log("no face detected"))
+        }
       </div>
     </div>
     )

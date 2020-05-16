@@ -12,7 +12,7 @@ import Particles from './Particlejs';
 const initialstate ={
   input:'',
   imageurl:'',
-  box:{},
+  box:[],
   route: 'signin',
   isSignedIn: false,
   user: {
@@ -42,24 +42,32 @@ class App extends Component {
   }
 
   calculateFaceLocation = (data) =>{
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
-    console.log("data from API: ",clarifaiFace);
+    console.log("API data:",data);
+    const Faces = data.outputs[0].data.regions;
+    console.log("faces from API: ",Faces);
     const image = document.getElementById('inputimage');
-    console.log(image);
+    console.log("given image",image);
     const width = Number(image.width);
     const height = Number(image.height);
     console.log("width,height: ",width,height);
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - (clarifaiFace.right_col * width),
-      bottomRow: height - (clarifaiFace.bottom_row * height)
-    }
+    const output = [];
+    Faces.map((f,i)=>{
+      var face = f.region_info.bounding_box;
+      var square = {
+        leftCol: face.left_col * width,
+        topRow: face.top_row * height,
+        rightCol: width - (face.right_col * width),
+        bottomRow: height - (face.bottom_row * height)
+      }
+      console.log("face",i,"calculated");
+      output.push(square);
+    })
+    return output;
   }
 
   displayBox(value){
     this.setState({box:value})
-    console.log(this.state.box);
+    console.log("box:",this.state.box);
   }
 
   onInputChange = (event) => {
@@ -89,8 +97,8 @@ class App extends Component {
             this.setState(Object.assign(this.state.user, { entries: count}))
           })
         }
-        this.displayBox(this.calculateFaceLocation(response));})
-      .catch(err => console.log(err));
+        this.displayBox(this.calculateFaceLocation(response));
+      }).catch(err => console.log(err));
   }
 
   onRouteChange = (route) => {
