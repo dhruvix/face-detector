@@ -6,7 +6,7 @@ function ImageLinkForm({onInputChange, onSubmit}) {
         <div>
             <div>
                 <p className='f3 gold'>
-                Type in the URL of an image with a face in it:
+                Type in the URL of an image with faces in it:
                 </p>
                 <div className='centre'>
                     <div className='form centre pa4 br3 shadow-5'>

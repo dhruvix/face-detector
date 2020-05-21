@@ -5,7 +5,7 @@ import './FaceRecognition.css';
 function FaceRecognition({imageurl,box}) {
     return (
         <div className='centre ma'>
-      <div className='absolute mt2'>
+      <div className='absolute mt2 mb2'>
         <img id='inputimage' alt='' src={imageurl} width='500px' heigh='auto'/>
         {
           (box.length !== 0)?
@@ -19,6 +19,7 @@ function FaceRecognition({imageurl,box}) {
             (console.log("no face detected"))
         }
       </div>
+      <p className="gold">courtesy: Clarifai API</p>
     </div>
     )
 }
