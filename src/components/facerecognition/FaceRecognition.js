@@ -19,7 +19,7 @@ function FaceRecognition({imageurl,box}) {
             (console.log("no face detected"))
         }
       </div>
-      <p className="gold">courtesy: Clarifai API</p>
+      <a href="https://www.clarifai.com/models/face-detection-image-recognition-model-a403429f2ddf4b49b307e318f00e528b-detection" target="_blank" rel="noopener noreferrer"><p className="gold pointer dim">courtesy: Clarifai API</p></a>
     </div>
     )
 }
