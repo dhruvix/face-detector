@@ -61,6 +61,7 @@ class App extends Component {
       }
       console.log("face",i,"calculated");
       output.push(square);
+      return(i);
     })
     return output;
   }

@@ -12,11 +12,11 @@ function FaceRecognition({imageurl,box}) {
             (box.map((a,i)=>{
               console.log("face",i,"recieved");
               return(
-              <div className='bounding-box' style={{top: a.topRow, right: a.rightCol, bottom: a.bottomRow, left: a.leftCol}}></div>
+              <div className='bounding-box' key={i} style={{top: a.topRow, right: a.rightCol, bottom: a.bottomRow, left: a.leftCol}}></div>
             )
             }))
             :
-            (console.log("no face detected"))
+            (console.log("no face detected yet"))
         }
       </div>
       <a href="https://www.clarifai.com/models/face-detection-image-recognition-model-a403429f2ddf4b49b307e318f00e528b-detection" target="_blank" rel="noopener noreferrer"><p className="gold pointer dim">courtesy: Clarifai API</p></a>

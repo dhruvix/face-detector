@@ -19,7 +19,9 @@ function Register({onRouteChange,loadUser}) {
   }
 
   function onSubmitSignIn(){
-    fetch('https://evening-anchorage-72666.herokuapp.com/register', {
+    console.log(name,email);
+    if(email.includes('@')){
+      fetch('https://evening-anchorage-72666.herokuapp.com/register', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -38,6 +40,10 @@ function Register({onRouteChange,loadUser}) {
           alert("couldn't register");
         }
       })
+    }
+    else{
+      alert("invalid email");
+    }
   }
 
     return (
