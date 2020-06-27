@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React,{useReducer} from 'react';
 import Navigation from './components/navigation/Navigation';
 import Logo from './components/logo/Logo';
 import ImageLinkForm from './components/imagelinkform/ImageLinkForm';
@@ -8,40 +8,23 @@ import Signin from './components/account/SignIn';
 import Register from './components/account/Register';
 import './App.css';
 import Particles from './Particlejs';
+import {reducer, INITIAL_STATE, setUser, setBox, setInput, setUrl, incrementCount, signOut, setSignIn, setRoute} from './Reducer'
 
-const initialstate ={
-  input:'',
-  imageurl:'',
-  box:[],
-  route: 'signin',
-  isSignedIn: false,
-  user: {
-    id: '',
-    name: '',
-    email: '',
-    entries: 0,
-    joined: ''
-  }
-};
+function App() {
 
-class App extends Component {
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
-  constructor() {
-    super();
-    this.state = initialstate;
-  }
-
-  loadUser = (data) =>{
-    this.setState({user:{
+  function loadUser(data){
+    dispatch(setUser({
       id: data.id,
       name: data.name,
       email: data.email,
       entries: data.entries,
       joined: data.joined
-    }})
+    }))
   }
 
-  calculateFaceLocation = (data) =>{
+  function calculateFaceLocation(data){
     console.log("API data:",data);
     const Faces = data.outputs[0].data.regions;
     console.log("faces from API: ",Faces);
@@ -66,23 +49,23 @@ class App extends Component {
     return output;
   }
 
-  displayBox(value){
-    this.setState({box:value})
-    console.log("box:",this.state.box);
+  function displayBox(value){
+    dispatch(setBox(value));
+    console.log("box:",state.box);
   }
 
-  onInputChange = (event) => {
-    this.setState({input: event.target.value});
-    console.log(this.state.input);
+  function onInputChange(event) {
+    dispatch(setInput(event.target.value));
+    console.log(state.input);
   }
 
-  onSubmit = () => {
-    this.setState({imageurl:this.state.input})
+  function onSubmit() {
+    dispatch(setUrl(state.input));
     fetch('https://evening-anchorage-72666.herokuapp.com/imageurl', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        input: this.state.input
+        input: state.input
       })
     }).then(response => response.json())
       .then((response)=> {console.log("submitted");
@@ -91,48 +74,45 @@ class App extends Component {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              id:this.state.user.id
+              id:state.user.id
             })
           }).then(response => response.json())
           .then(count => {
-            this.setState(Object.assign(this.state.user, { entries: count}))
+            dispatch(incrementCount(count));
           })
         }
-        this.displayBox(this.calculateFaceLocation(response));
+        displayBox(calculateFaceLocation(response));
       }).catch(err => console.log(err));
   }
 
-  onRouteChange = (route) => {
+  function onRouteChange(route) {
     if (route === 'signout') {
-      this.setState(initialstate)
+      dispatch(signOut());
     } else if (route === 'home') {
-      this.setState({isSignedIn: true})
+      dispatch(setSignIn());
     }
-    this.setState({route: route});
+    dispatch(setRoute(route));
   }
 
-  render(){
-    const { isSignedIn, imageurl, route, box } = this.state;
-    return (
-      <div className="App">
-         <Particles />
-        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
-        { route === 'home'
-          ? <div>
-              <Logo />
-              <Rank name={this.state.user.name} entries={this.state.user.entries}/>
-              <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit} />
-              <FaceRecognition box={box} imageurl={imageurl} />
-            </div>
-          : (
-             route === 'signin'
-             ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
-             : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
-            )
-        }
-      </div>
-    );
-  }
+  return (
+    <div className="App">
+       <Particles />
+      <Navigation isSignedIn={state.isSignedIn} onRouteChange={onRouteChange} />
+      { state.route === 'home'
+        ? <div>
+            <Logo />
+            <Rank name={state.user.name} entries={state.user.entries}/>
+            <ImageLinkForm onInputChange={onInputChange} onSubmit={onSubmit} />
+            <FaceRecognition box={state.box} imageurl={state.imageurl} />
+          </div>
+        : (
+          state.route === 'signin'
+           ? <Signin loadUser={loadUser} onRouteChange={onRouteChange}/>
+           : <Register loadUser={loadUser} onRouteChange={onRouteChange}/>
+          )
+      }
+    </div>
+  );
 }
 
 export default App;
