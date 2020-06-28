@@ -6,6 +6,6 @@ The project uses the context API for state management and also uses react hooks,
 
 Face detection is done using the Clarifai API.
 
-try out the app here
+<a href="dhruvix.github.io/face-detector/">click here to check it out!</a>
 
 <img src="src/components/logo/example.PNG" alt="exmple picture" />
