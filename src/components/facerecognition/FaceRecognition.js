@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AppContext } from '../../App';
 import './FaceRecognition.css';
 
 
-function FaceRecognition({imageurl,box}) {
+function FaceRecognition() {
+
+  const app = useContext(AppContext);
     return (
         <div className='centre ma'>
       <div className='absolute mt2 mb2'>
-        <img id='inputimage' alt='' src={imageurl} width='500px' heigh='auto'/>
+        <img id='inputimage' alt='' src={app.state.imageurl} width='500px' heigh='auto'/>
         {
-          (box.length !== 0)?
-            (box.map((a,i)=>{
+          (app.state.box.length !== 0)?
+            (app.state.box.map((a,i)=>{
               console.log("face",i,"recieved");
               return(
               <div className='bounding-box' key={i} style={{top: a.topRow, right: a.rightCol, bottom: a.bottomRow, left: a.leftCol}}></div>

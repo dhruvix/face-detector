@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
+import { AppContext } from '../../App';
+import {setUser, setRoute, setSignIn} from '../../global/Reducer';
 
-function Signin({onRouteChange,loadUser}) {
+function Signin() {
 
+  const app = useContext(AppContext);
   const [signInPassword, setPassword] = useState('');
   const [signInEmail, setEmail] = useState('');
 
@@ -15,6 +18,7 @@ function Signin({onRouteChange,loadUser}) {
 
   function onSubmitSignIn(){
     console.log(signInEmail);
+    console.log("App",app);
     fetch('https://evening-anchorage-72666.herokuapp.com/signin', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
@@ -24,10 +28,17 @@ function Signin({onRouteChange,loadUser}) {
       })
     })
     .then(response => response.json())
-    .then(user => {
-      if(user.id){
-        loadUser(user);
-        onRouteChange('home');
+    .then(data => {
+      if(data.id){
+        app.dispatch(setUser({
+          id: data.id,
+          name: data.name,
+          email: data.email,
+          entries: data.entries,
+          joined: data.joined
+        }));
+        app.dispatch(setRoute('home'));
+        app.dispatch(setSignIn());
       }
       else{
         alert("couldn't sign in");
@@ -71,7 +82,7 @@ function Signin({onRouteChange,loadUser}) {
               />
             </div>
             <div className="lh-copy mt3">
-              <p  onClick={() => onRouteChange('register')} className="f6 link dim gold db pointer">Register</p>
+              <p  onClick={() => app.dispatch(setRoute('register'))} className="f6 link dim gold db pointer">Register</p>
             </div>
           </div>
         </main>

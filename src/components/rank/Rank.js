@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AppContext } from '../../App';
 
-function Rank({name, entries}) {
+function Rank() {
+
+    const app = useContext(AppContext);
+
     return (
         <div>
             <div className='yellow f3'>
-                {`${name} , your entry count is...`}
+                {`${app.state.user.name} , your entry count is...`}
                 <div className='gold f1 '>
-                    {entries}
+                    {app.state.user.entries}
                 </div>
             </div>
         </div>

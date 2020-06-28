@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
+import { AppContext } from '../../App';
+import {setUser, setRoute, setSignIn} from '../../global/Reducer';
 
-function Register({onRouteChange,loadUser}) {
+function Register() {
   
+  const app = useContext(AppContext);
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -31,10 +34,17 @@ function Register({onRouteChange,loadUser}) {
       })
     })
     .then(response => response.json())
-      .then(user => {
-        if (user.id) {
-          loadUser(user);
-          onRouteChange('home');
+      .then(data => {
+        if (data.id) {
+          app.dispatch(setUser({
+            id: data.id,
+            name: data.name,
+            email: data.email,
+            entries: data.entries,
+            joined: data.joined
+          }));
+          app.dispatch(setRoute('home'));
+          app.dispatch(setSignIn());
         }
         else{
           alert("couldn't register");
